@@ -1,24 +1,16 @@
-name: CI:PR
-on: [pull_request]
+name: Audit live site
+on: push
+
 jobs:
-  test:
-    name: Lighthouse
+  audit:
     runs-on: ubuntu-latest
     steps:
-      - name: Lighthouse
-        uses: manrueda/lighthouse-report-action@v1.0.1
-        with:
-            reports: '.lighthouseci'
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Install
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: install
-      - name: Lint & Format
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: lint
+    - name: Audit live URL
+      uses: jakejarvis/lighthouse-action@master
+      with:
+        url: 'https://jarv.is/'
+    - name: Upload results as an artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: report
+        path: './report'
