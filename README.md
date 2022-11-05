@@ -1,3 +1,1 @@
 # prophets-card
-
-Hello
