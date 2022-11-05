@@ -1,0 +1,24 @@
+name: CI:PR
+on: [pull_request]
+jobs:
+  test:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lighthouse
+        uses: manrueda/lighthouse-report-action@v1.0.1
+        with:
+            reports: '.lighthouseci'
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Install
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: install
+      - name: Lint & Format
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: lint
